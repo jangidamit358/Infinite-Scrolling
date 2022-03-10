@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" placeholder="Search....">
+    <button>Search</button>
+    <div class="container">
+
+        <h1>Infinit Scrolling</h1>
+
+        
+    </div>
+</body>
+</html>
+<script>
+    const container=document.querySelector(".container")
+    let limit=10
+    let pageCount=1
+    let postCount=1
+    
+    const getPost=async ()=>{
+      const response=await fetch(`https://api.javascripttutorial.net/v1/quotes/?page=${pageCount}&limit=${limit}`)
+      const data=await response.json()
+    //   data=data.data
+      console.log(data)
+
+      data.data.map((curElm,index)=>{
+          const htmlData=`
+          <div class="posts">
+           <p class="post-id">${postCount++}</p>
+           <h2 class="title">${curElm.author}</h2>
+           <p class="post-info">${curElm.quote}</p>
+            </div>
+          `
+          container.insertAdjacentHTML("beforeend",htmlData)
+      })
+   }
+getPost()
+
+const showData=()=>{
+    pageCount++
+    getPost()
+}
+
+window.addEventListener("scroll",()=>{
+    const {scrollHeight,scrollTop,clientHeight}=document.documentElement;
+
+    if(scrollTop+clientHeight>=scrollHeight)
+    {
+        console.log("here")
+            showData()
+    }
+})
+</script>
